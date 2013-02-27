@@ -11,51 +11,57 @@
 
 namespace C2is\Provider;
 
+use C2is\AdminGen\Controller\RouterController;
+
 use Silex\Application;
 use Silex\ServiceProviderInterface;
-use Silex\ControllerProviderInterface;
-use Silex\ServiceControllerResolver;
 
-use C2is\AdminGen\Controller\RouterController;
+use Exception;
+use InvalidArgumentException;
 
 /**
  * Silex Admin Gen provider.
  *
  * @author Morgan Brunot <brunot.morgan@gmail.com>
  */
-class AdminGenServiceProvider implements ServiceProviderInterface, ControllerProviderInterface
+class AdminGenServiceProvider implements ServiceProviderInterface
 {
+    protected $config;
+
     public function register(Application $app)
     {
-        $app['admin_gen.controller.router'] = $app->share(function ($app) {
-            return new RouterController($app['twig'], $app['url_generator'], $app['admin_gen.config_dir']);
-        });
-
         $app['twig.loader.filesystem'] = $app->share($app->extend('twig.loader.filesystem', function ($loader, $app) {
             $loader->addPath(__DIR__.'/../AdminGen/Resources/views', 'AdminGen');
 
             return $loader;
         }));
-    }
 
-    public function connect(Application $app)
-    {
-        if (!$app['resolver'] instanceof ServiceControllerResolver) {
-            // using RuntimeException crashes PHP?!
-            throw new \LogicException('You must enable the ServiceController service provider to be able to use the WebProfiler.');
-        }
+        $app['form.extensions'] = $app->share($app->extend('form.extensions', function ($extensions) use ($app) {
+            $extensions[] = new \C2is\Form\Extension();
 
-        $controllers = $app['controllers_factory'];
-        $controllers->match('/{class}', 'admin_gen.controller.router:listAction')->bind('admin_gen_list');
-        $controllers->match('/{class}/create', 'admin_gen.controller.router:editAction')->bind('admin_gen_create');
-        $controllers->match('/{class}/{id}/update', 'admin_gen.controller.router:updateAction')->bind('admin_gen_update');
-        $controllers->match('/{class}/{id}/delete', 'admin_gen.controller.router:deleteAction')->bind('admin_gen_delete');
-
-        return $controllers;
+            return $extensions;
+        }));
     }
 
     public function boot(Application $app)
     {
+        if (!isset($app['admin_gen.config_file'])) {
+            throw new InvalidArgumentException(
+                'Unable to guess the config file. Please, initialize the "admin_gen.config_file" parameter.'
+            );
+        }
 
+        $admin  = isset($app['admin_gen.mount_path']) ? trim($app['admin_gen.mount_path'], '/') : 'admin';
+        $config = require_once $app['admin_gen.config_file'];
+
+        foreach ($config as $url => $options) {
+            $url = str_replace('::', '/', $url);
+
+            $app->mount('/'.$admin.'/'.$url, new RouterController(
+                $options['name'],
+                $options['model'],
+                $options['form']
+            ));
+        }
     }
 }

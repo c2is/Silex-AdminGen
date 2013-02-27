@@ -16,6 +16,8 @@ And enable it in your application:
 
 use C2is\Provider\AdminGenServiceProvider;
 
-$app->register($adminGen = new AdminGenServiceProvider());
-$app->mount('/admin', $adminGen);
+$app->register(new AdminGenServiceProvider(), array(
+    'admin_gen.mount_path'  => 'admin', // optional
+    'admin_gen.config_file' => '/path/to/config/admingen/admingen-conf.php',
+));
 ```

@@ -12,68 +12,105 @@
 namespace C2is\AdminGen\Controller;
 
 use Silex\Application;
-use Silex\ControllerCollection;
 use Silex\ControllerProviderInterface;
 
-use Exception;
-use Twig_Environment;
-
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
-use Symfony\Component\Routing\Generator\urlGenerator;
-use Symfony\Component\HttpFoundation\RedirectResponse;
+use Symfony\Component\HttpKernel\Exception\HttpException;
 
-use Cungfoo\Lib\Listing\Listing;
-use Cungfoo\Lib\Listing\Filler;
-use Cungfoo\Lib\Listing\Column;
-use Cungfoo\Model\Metadata;
-use Cungfoo\Model\MetadataQuery;
-use Cungfoo\Form\Type\MetadataType;
-use Cungfoo\Model\Seo;
-use Cungfoo\Model\SeoQuery;
-use Cungfoo\Form\Type\SeoType;
-use Cungfoo\Form\Type\ContextType;
+use Exception;
 
 /**
  * RouterController.
  *
  * @author Morgan Brunot <brunot.morgan@gmail.com>
  */
-class RouterController
+class RouterController implements ControllerProviderInterface
 {
-    private $config;
-    private $urlGenerator;
-    private $twig;
+    private
+        $name,
+        $modelClassname,
+        $queryClassname,
+        $peerClassname,
+        $formClassname;
 
-    public function __construct(Twig_Environment $twig, urlGenerator $urlGenerator, $configFile)
+    public function __construct($name, $modelClassname, $formClassname)
     {
-        if (!file_exists($configFile)) {
-            throw new Exception("Admin gen config files does not exist", 1);
+        if (!class_exists($modelClassname)) {
+            throw new Exception($modelClass.' model classname is undefined.');
         }
 
-        $this->config = require_once $configFile;
-        $this->twig = $twig;
-        $this->urlGenerator = $urlGenerator;
+        $this->name = $name;
+        $this->modelClassname = $modelClassname;
+        $this->queryClassname = $modelClassname.'Query';
+        $this->peerClassname = $modelClassname.'Peer';
+        $this->formClassname = $formClassname;
     }
 
-    public function listAction($class)
+    public function connect(Application $app)
     {
-        return new Response($this->twig->render('@AdminGen/Router/list.html.twig'));
+        $ctl = $app['controllers_factory'];
+
+        // convert id url to object
+        $ctl->convert('object', array($this, 'idToObject'));
+
+        // bind list action
+        $ctl->get('/{pageSlug}/{page}', array($this, 'listAction'))
+            ->assert('pageSlug', 'pages')
+            ->value('pageSlug', 'pages')
+            ->assert('page', '\d+')
+            ->value('page', 1)
+            ->bind($this->name.'_admingen_list');
+
+        // bind create action
+        $ctl->get('/create', array($this, 'updateAction'))
+            ->bind($this->name.'_admingen_create');
+
+        // bind update action
+        $ctl->get('/{object}/update', array($this, 'updateAction'))
+            ->assert('object', '\d*')
+            ->bind($this->name.'_admingen_update');
+
+        // bind delete action
+        $ctl->get('/{object}/delete', array($this, 'deleteAction'))
+            ->assert('object', '\d*')
+            ->bind($this->name.'_admingen_delete');
+
+        return $ctl;
     }
 
-    public function editAction($class)
+    function idToObject($object)
     {
-        return $this->updateAction($class);
+        if (!$object) return;
+
+        $modelObject = call_user_func($this->queryClassname.'::create')
+            ->filterById($object)
+            ->findOne()
+        ;
+
+        if (!$modelObject) {
+            throw new HttpException(404, 'Page not found');
+        }
+
+        return $modelObject;
     }
 
-    public function updateAction($class, $id = null)
+    function listAction(Application $app, Request $request, $page)
     {
-        return new Response($this->twig->render('@AdminGen/Router/edit.html.twig'));
+        return $app->renderView('@AdminGen/Router/list.html.twig');
     }
 
-    public function deleteAction($class, $id)
+    function editAction(Application $app, Request $request)
     {
-        return new RedirectResponse($this->urlGenerator->generate('admin_gen_list', array('class' => $class)), 302);
+        return $this->updateAction();
+    }
+
+    function updateAction(Application $app, Request $request, $object = null)
+    {
+        return $app->renderView('@AdminGen/Router/edit.html.twig');
+    }
+
+    function deleteAction(Application $app, Request $request, $object)
+    {
+        return $app->redirect($app->path($this->name.'_admingen_list'), 302);
     }
 }
