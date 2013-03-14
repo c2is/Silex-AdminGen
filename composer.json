@@ -21,7 +21,7 @@
     },
     "autoload": {
         "psr-0": {
-            "C2is": "src/"
+            "C2is\\": ""
         }
     },
     "bin": ["generator/bin/admingen"]
