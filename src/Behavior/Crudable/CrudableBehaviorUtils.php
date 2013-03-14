@@ -38,6 +38,14 @@ class CrudableBehaviorUtils
         );
     }
 
+    static public function getListingClassname($namespace, $tableName)
+    {
+        return str_replace('Model', "Listing", sprintf("\\%s\\%sListing",
+            $namespace,
+            CrudableBehaviorUtils::camelize($tableName)
+        ));
+    }
+
     static public function formatArrayToString($options, $iteration = 0)
     {
         $iteration++;

@@ -60,7 +60,8 @@ class AdminGenServiceProvider implements ServiceProviderInterface
             $app->mount('/'.$admin.'/'.$url, new RouterController(
                 $options['name'],
                 $options['model'],
-                $options['form']
+                $options['form'],
+                $options['listing']
             ));
         }
     }

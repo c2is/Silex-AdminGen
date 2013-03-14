@@ -113,6 +113,10 @@ class CrudableBehaviorObjectBuilderModifier
         // crudable parameters
         $crudableParameters = $this->getParameters();
 
+        if (!isset($crudableParameters['path'])) {
+            return;
+        }
+
         // validate the existence of the crud configuration file
         $phpConfDir   = $this->behavior->getTable()->getGeneratorConfig()->getBuildProperties()['behaviorCrudablePhpconfDir'];
         $crudFilename = sprintf("%s/admingen-conf.php", rtrim($phpConfDir, '/'));
@@ -128,6 +132,11 @@ class CrudableBehaviorObjectBuilderModifier
         );
 
         $queryClassname = CrudableBehaviorUtils::getQueryClassname(
+            $this->behavior->getTable()->getNamespace(),
+            $this->behavior->getTable()->getName()
+        );
+
+        $listingClassname = CrudableBehaviorUtils::getListingClassname(
             $this->behavior->getTable()->getNamespace(),
             $this->behavior->getTable()->getName()
         );
@@ -148,11 +157,12 @@ class CrudableBehaviorObjectBuilderModifier
             throw new Exception("Error Processing CrudableBehavior::generateAdminGenConfig()", 1);
         }
 
-        $controllersConf[str_replace('/', '::', $crudableParameters['path']) ?: $this->behavior->getTable()->getName()] = array(
-            'name'  => $this->behavior->getTable()->getName(),
+        $controllersConf[str_replace('/', '::', $crudableParameters['path'])] = array(
+            'name' => $this->behavior->getTable()->getName(),
             'model' => $modelClassname,
-            'form'  => $formClassname,
+            'form' => $formClassname,
             'query' => $queryClassname,
+            'listing' => $listingClassname,
         );
 
         // write the controllers configuration file

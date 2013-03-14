@@ -89,7 +89,7 @@ class {$classname} extends AbstractType
         }
 
         if (in_array($column->getName(), $this->fileFields)) {
-            return 'cungfoo_file';
+            return 'file';
         }
 
         switch ($column->getType()) {
@@ -293,7 +293,7 @@ class {$classname} extends AbstractType
                     $columnDeleted = clone $column;
                     $columnDeleted->setName($column->getName().'_deleted');
                     $fields[$columnDeleted->getName()]['type'] = 'checkbox';
-                    $fields[$columnDeleted->getName()]['options'] = array_merge(array('property_path' => false), $this->getFieldOptions($columnDeleted));
+                    $fields[$columnDeleted->getName()]['options'] = array_merge(array('mapped' => false), $this->getFieldOptions($columnDeleted));
                 }
             }
         }

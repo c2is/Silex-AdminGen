@@ -1,3 +1,24 @@
 {% extends "@AdminGen/layout.html.twig" %}
 
-{% block content %}{% endblock %}
+{% block content %}
+    {% if form.id.vars['value'] %}
+        <h2>{{ (name ~ ".crud.update") | trans  ({'%name%': form.id.vars['value'] }) }}</h2><hr/>
+        <form action="{{ path('%s_admingen_update' | format (name), {'object': form.id.vars['value']}) }}" method="post" {{ form_enctype(form) }}>
+    {% else %}
+        <h2>{{ (name ~ ".crud.create") | trans}}</h2><hr/>
+        <form action="{{ path('%s_admingen_create' | format (name)) }}" method="post" {{ form_enctype(form) }}>
+    {% endif %}
+        {{ form_widget(form) }}
+        <div class="form-actions">
+            <div class="btn-toolbar">
+                <div class="btn-group">
+                    <a class="btn" href="{{ path('%s_admingen_list' | format (name)) }}"><i class="icon-list"></i> {{ "crud.button.list" | trans }}</a>
+                {% if form.id.vars['value'] %}
+                    <a class="btn btn-danger" href="{{ path('%s_admingen_delete' | format (name), {'id': form.id.vars['value'] }) }}"><i class="icon-remove-circle icon-white"></i> {{ "crud.button.delete" | trans }}</a>
+                {% endif %}
+                </div>
+                <button type="submit" class="btn btn-primary pull-right" style="margin-bottom: -5px">{{ "crud.button.save" | trans }}</button>
+            </div>
+        </div>
+    </form>
+{% endblock %}

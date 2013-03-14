@@ -11,6 +11,8 @@
 
 namespace C2is\AdminGen\Controller;
 
+use C2is\Lib\Listing\Filler\PropelFiller;
+
 use Silex\Application;
 use Silex\ControllerProviderInterface;
 
@@ -31,12 +33,13 @@ class RouterController implements ControllerProviderInterface
         $modelClassname,
         $queryClassname,
         $peerClassname,
-        $formClassname;
+        $formClassname,
+        $listingClassname;
 
-    public function __construct($name, $modelClassname, $formClassname)
+    public function __construct($name, $modelClassname, $formClassname, $listingClassname)
     {
         if (!class_exists($modelClassname)) {
-            throw new Exception($modelClass.' model classname is undefined.');
+            throw new Exception($modelClassname.' model classname is undefined.');
         }
 
         $this->name = $name;
@@ -44,6 +47,7 @@ class RouterController implements ControllerProviderInterface
         $this->queryClassname = $modelClassname.'Query';
         $this->peerClassname = $modelClassname.'Peer';
         $this->formClassname = $formClassname;
+        $this->listingClassname = $listingClassname;
     }
 
     public function connect(Application $app)
@@ -62,11 +66,11 @@ class RouterController implements ControllerProviderInterface
             ->bind($this->name.'_admingen_list');
 
         // bind create action
-        $ctl->get('/create', array($this, 'updateAction'))
+        $ctl->match('/create', array($this, 'updateAction'))
             ->bind($this->name.'_admingen_create');
 
         // bind update action
-        $ctl->get('/{object}/update', array($this, 'updateAction'))
+        $ctl->match('/{object}/update', array($this, 'updateAction'))
             ->assert('object', '\d*')
             ->bind($this->name.'_admingen_update');
 
@@ -94,23 +98,55 @@ class RouterController implements ControllerProviderInterface
         return $modelObject;
     }
 
-    function listAction(Application $app, Request $request, $page)
+    function listAction(Application $app, $page)
     {
-        return $app->renderView('@AdminGen/Router/list.html.twig');
+        $paginator = call_user_func($this->queryClassname.'::create')->paginate($page, 50);
+
+        // generate the current listing object
+        $listingClassname = $this->listingClassname;
+        $listing = new $listingClassname($app);
+        $listing->setFiller(new PropelFiller($paginator->getResults()));
+
+        return $app->renderView('@AdminGen/Router/list.html.twig', array(
+            'name'      => $this->name,
+            'columns'   => $listing->getColumnNames(),
+            'lines'     => $listing->render(),
+            'paginator' => $paginator,
+        ));
     }
 
-    function editAction(Application $app, Request $request)
+    function editAction()
     {
         return $this->updateAction();
     }
 
     function updateAction(Application $app, Request $request, $object = null)
     {
-        return $app->renderView('@AdminGen/Router/edit.html.twig');
+        if (!$object) {
+            $object = new $this->modelClassname();
+        }
+
+        $form = $app['form.factory']->create(new $this->formClassname($app), $object);
+
+        if ('POST' == $request->getMethod()) {
+            $form->bind($request);
+            if ($form->isValid()) {
+                $object->saveFromCrud($app, $form);
+
+                return $app->redirect($app['url_generator']->generate($this->name.'_admingen_list'));
+            }
+        }
+
+        return $app->renderView('@AdminGen/Router/edit.html.twig', array(
+            'name' => $this->name,
+            'form' => $form->createView(),
+        ));
     }
 
-    function deleteAction(Application $app, Request $request, $object)
+    function deleteAction(Application $app, $object)
     {
+        $object->delete();
+
         return $app->redirect($app->path($this->name.'_admingen_list'), 302);
     }
 }

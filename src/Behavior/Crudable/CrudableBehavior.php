@@ -4,6 +4,8 @@ require_once dirname(__FILE__) . '/CrudableBehaviorUtils.php';
 require_once dirname(__FILE__) . '/CrudableBehaviorObjectBuilderModifier.php';
 require_once dirname(__FILE__) . '/CrudableBehaviorBaseFormTypeBuilder.php';
 require_once dirname(__FILE__) . '/CrudableBehaviorFormTypeBuilder.php';
+require_once dirname(__FILE__) . '/CrudableBehaviorBaseListingBuilder.php';
+require_once dirname(__FILE__) . '/CrudableBehaviorListingBuilder.php';
 
 use \CrudableBehaviorUtils as Utils;
 
@@ -17,7 +19,7 @@ class CrudableBehavior extends Behavior
     // default parameters value
     protected $parameters = array(
         'route_mount'   => '/',
-        'route_path'    => null,
+        'path'          => null,
         'type_file'     => CrudableBehavior::TYPE_FILE,
         'type_textrich' => CrudableBehavior::TYPE_TEXTRICH,
     );
@@ -25,9 +27,9 @@ class CrudableBehavior extends Behavior
     // additional builders
     protected $additionalBuilders = array(
         'CrudableBehaviorBaseFormTypeBuilder',
-        //'CrudableBehaviorBaseListingBuilder',
+        'CrudableBehaviorBaseListingBuilder',
         'CrudableBehaviorFormTypeBuilder',
-        //'CrudableBehaviorListingBuilder',
+        'CrudableBehaviorListingBuilder',
     );
 
     public function getTypeFileColumns()

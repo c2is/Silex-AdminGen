@@ -1,3 +1,29 @@
 #!/usr/bin/env php
 <?php
 
+if (!isset($argv[1])) {
+    throw new Exception("No project directory specified", 1);
+}
+
+define('PROJECT_DIRECTORY', __DIR__.'/../../../../..');
+define('PROPEL_CONFIG_DIRECTORY', substr($argv[1], 0, 1) == '/' ? $argv[1] : PROJECT_DIRECTORY.'/'.$argv[1]);
+
+require_once PROJECT_DIRECTORY.'/vendor/autoload.php';
+
+use Symfony\Component\Process\Process;
+
+$specificProperties = array(
+    'propel.behavior.crudable.class' => PROJECT_DIRECTORY.'/vendor/c2is/silex-admingen/src/Behavior.Crudable.CrudableBehavior',
+    'propel.behavior.phpconf.dir' => PROPEL_CONFIG_DIRECTORY.'/admingen',
+);
+
+$specificPropertiesString = '';
+foreach ($specificProperties as $specificPropertieKey => $specificPropertieValue) {
+    $specificPropertiesString .= "-D$specificPropertieKey=$specificPropertieValue ";
+}
+
+$process = new Process(sprintf("%s/vendor/bin/propel-gen %s %s", PROJECT_DIRECTORY, PROPEL_CONFIG_DIRECTORY, $specificPropertiesString));
+$process->setTimeout(3600);
+$process->run();
+
+print $process->getOutput();

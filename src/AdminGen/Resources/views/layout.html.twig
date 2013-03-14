@@ -1,11 +1,14 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Bootstrap 101 Template</title>
+    <title>Silex Admin Gen by C2iS</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{{ app.request.basePath }}/assets/css/bootstrap.min.css">
 </head>
 <body>
-    {% block content '' %}
-    <script src="http://code.jquery.com/jquery.js"></script>
+    <div class="container">
+        {% block content '' %}
+    </div>
+    <script href="{{ app.request.basePath }}/assets/js/bootstrap.min.js"></script>
 </body>
 </html>
