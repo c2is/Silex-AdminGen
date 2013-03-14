@@ -1,0 +1,28 @@
+{
+    "name": "c2is/silex-admingen",
+    "authors": [{
+        "name"    : "Morgan Brunot",
+        "email"   : "brunot.morgan@gmail.com",
+        "homepage": "http://oziks.fr"
+    }],
+    "require": {
+        "php"                             : ">=5.4",
+        "silex/silex"                     : "1.0.*",
+        "twig/twig"                       : ">=1.8.0,<2.0-dev",
+        "symfony/twig-bridge"             : "~2.2",
+        "symfony/filesystem"              : "~2.2",
+        "symfony/finder"                  : "~2.2",
+        "symfony/config"                  : "~2.2",
+        "symfony/yaml"                    : "~2.2",
+        "symfony/form"                    : "~2.2",
+        "symfony/process"                 : "~2.2",
+        "propel/propel1"                  : "1.6.*",
+        "propel/propel-service-provider"  : "dev-master",
+    },
+    "autoload": {
+        "psr-0": {
+            "": "src/"
+        }
+    },
+    "bin": ["generator/bin/admingen"]
+}
