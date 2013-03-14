@@ -115,11 +115,6 @@ class RouterController implements ControllerProviderInterface
         ));
     }
 
-    function editAction()
-    {
-        return $this->updateAction();
-    }
-
     function updateAction(Application $app, Request $request, $object = null)
     {
         if (!$object) {
