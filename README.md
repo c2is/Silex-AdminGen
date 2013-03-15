@@ -1,5 +1,5 @@
-Silex Admin Gen
-===============
+Silex Admin Gen [WIP]
+=====================
 
 The Silex Admin Gen service provider allows you to generate a wonderful admin dashboard in your Silex application.
 
@@ -7,6 +7,11 @@ To enable it, add this dependency to your composer.json file:
 
 ```js
 "c2is/admin-gen": "dev-master"
+```
+
+Generate crud admin:
+```shell
+$ ./vendor/bin/admingen /path/to/config
 ```
 
 And enable it in your application:
