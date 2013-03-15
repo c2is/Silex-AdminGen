@@ -14,7 +14,7 @@
                 <div class="btn-group">
                     <a class="btn" href="{{ path('%s_admingen_list' | format (name)) }}"><i class="icon-list"></i> {{ "crud.button.list" | trans }}</a>
                 {% if form.id.vars['value'] %}
-                    <a class="btn btn-danger" href="{{ path('%s_admingen_delete' | format (name), {'id': form.id.vars['value'] }) }}"><i class="icon-remove-circle icon-white"></i> {{ "crud.button.delete" | trans }}</a>
+                    <a class="btn btn-danger" href="{{ path('%s_admingen_delete' | format (name), {'object': form.id.vars['value'] }) }}"><i class="icon-remove-circle icon-white"></i> {{ "crud.button.delete" | trans }}</a>
                 {% endif %}
                 </div>
                 <button type="submit" class="btn btn-primary pull-right" style="margin-bottom: -5px">{{ "crud.button.save" | trans }}</button>

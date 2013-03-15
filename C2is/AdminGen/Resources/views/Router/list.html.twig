@@ -33,8 +33,8 @@
                 <td>{{ column | raw }}</td>
             {% endif %}
             {% endfor %}
-            <td class="actions-item"><a class="edit" href="{{ path('%s_admingen_update' | format (name), {'object': line.id}) }}"><i class="icon-edit"></i></a></td>
-            <td class="actions-item"><a class="delete" href="{{ path('%s_admingen_delete' | format (name), {'object': line.id}) }}"><i data-confirm-ok="{{ "crud.modal.delete.ok" | trans }}" data-confirm-cancel="{{ "crud.modal.delete.cancel" | trans }}" data-confirm-title="{{ "crud.modal.delete.title" | trans }}" data-confirm-message="{{ "crud.modal.delete.message" | trans  ({'%code%': line.id }) }}"  class="icon-remove-circle"></i></a></td>
+            <td class="actions-item"><a class="edit" href="{{ path('%s_admingen_update' | format (name), {'object': line.id}) }}">edit</a></td>
+            <td class="actions-item"><a class="delete" href="{{ path('%s_admingen_delete' | format (name), {'object': line.id}) }}">delete</a></td>
         </tr>
         {% endfor %}
         </tbody>

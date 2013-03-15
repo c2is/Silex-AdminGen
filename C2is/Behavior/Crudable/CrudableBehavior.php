@@ -7,8 +7,6 @@ require_once dirname(__FILE__) . '/CrudableBehaviorFormTypeBuilder.php';
 require_once dirname(__FILE__) . '/CrudableBehaviorBaseListingBuilder.php';
 require_once dirname(__FILE__) . '/CrudableBehaviorListingBuilder.php';
 
-use \CrudableBehaviorUtils as Utils;
-
 use Symfony\Component\Filesystem\Filesystem;
 
 class CrudableBehavior extends Behavior
@@ -20,8 +18,6 @@ class CrudableBehavior extends Behavior
     protected $parameters = array(
         'route_mount'   => '/',
         'path'          => null,
-        'type_file'     => CrudableBehavior::TYPE_FILE,
-        'type_textrich' => CrudableBehavior::TYPE_TEXTRICH,
     );
 
     // additional builders

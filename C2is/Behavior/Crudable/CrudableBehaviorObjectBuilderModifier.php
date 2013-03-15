@@ -2,8 +2,6 @@
 
 require_once dirname(__FILE__) . '/CrudableBehaviorUtils.php';
 
-use \CrudableBehaviorUtils as Utils;
-
 use Symfony\Component\Filesystem\Filesystem;
 
 class CrudableBehaviorObjectBuilderModifier

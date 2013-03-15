@@ -15,6 +15,7 @@ use C2is\AdminGen\Controller\RouterController;
 
 use Silex\Application;
 use Silex\ServiceProviderInterface;
+use Silex\Provider\TranslationServiceProvider;
 
 use Exception;
 use InvalidArgumentException;
@@ -41,6 +42,8 @@ class AdminGenServiceProvider implements ServiceProviderInterface
 
             return $extensions;
         }));
+
+        $app->register(new TranslationServiceProvider());
     }
 
     public function boot(Application $app)
