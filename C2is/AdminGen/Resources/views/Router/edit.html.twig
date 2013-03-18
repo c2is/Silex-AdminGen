@@ -1,6 +1,9 @@
 {% extends "@AdminGen/layout.html.twig" %}
 
 {% block content %}
+
+    {% form_theme form '@AdminGen/Form/theme.html.twig' %}
+
     {% if form.id.vars['value'] %}
         <h2>{{ (name ~ ".crud.update") | trans  ({'%name%': form.id.vars['value'] }) }}</h2><hr/>
         <form action="{{ path('%s_admingen_update' | format (name), {'object': form.id.vars['value']}) }}" method="post" {{ form_enctype(form) }}>

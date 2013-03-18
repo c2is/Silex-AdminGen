@@ -43,6 +43,10 @@ class AdminGenServiceProvider implements ServiceProviderInterface
             return $extensions;
         }));
 
+        $app['admingen_menu'] = $app->share(function ($app) {
+            return array();
+        });
+
         $app->register(new TranslationServiceProvider());
     }
 
@@ -57,15 +61,27 @@ class AdminGenServiceProvider implements ServiceProviderInterface
         $admin  = isset($app['admin_gen.mount_path']) ? trim($app['admin_gen.mount_path'], '/') : 'admin';
         $config = require_once $app['admin_gen.config_file'];
 
-        foreach ($config as $url => $options) {
-            $url = str_replace('::', '/', $url);
-
-            $app->mount('/'.$admin.'/'.$url, new RouterController(
+        foreach ($config as $escapedUrl => $options) {
+            $url = "/$admin/".str_replace('::', '/', $escapedUrl);
+            $router = new RouterController(
                 $options['name'],
                 $options['model'],
                 $options['form'],
                 $options['listing']
-            ));
+            );
+
+
+            $app['admingen_menu'] = $app->share($app->extend('admingen_menu', function ($menu) use ($escapedUrl, $url) {
+                $menu[] = array(
+                    'name'   => "$escapedUrl",
+                    'url'    => "$url",
+                );
+
+                return $menu;
+            }));
+
+
+            $app->mount($url, $router);
         }
     }
 }

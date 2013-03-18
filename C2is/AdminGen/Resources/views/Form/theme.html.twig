@@ -1,0 +1,154 @@
+{% extends 'form_div_layout.html.twig' %}
+
+{% block field_row %}
+{% spaceless %}
+    <div class="control-group">
+        {{ form_label(form, label|default(null)) }}
+        <div class="controls">
+            {{ form_widget(form) }}
+            {{ form_errors(form)}}
+        </div>
+    </div>
+{% endspaceless %}
+{% endblock field_row %}
+
+{% block field_errors %}
+{% spaceless %}
+    {% if errors|length > 0 %}
+    <span class="help-{{ block('error_type') }}">
+            {% for error in errors %}
+                {{
+                    error.messagePluralization is null
+                        ? error.messageTemplate|trans(error.messageParameters, 'validators')
+                        : error.messageTemplate|transchoice(error.messagePluralization, error.messageParameters, 'validators')
+                }} <br>
+            {% endfor %}
+    </span>
+    {% endif %}
+{% endspaceless %}
+{% endblock field_errors %}
+
+{% block generic_label %}
+{% set attr = attr|merge({'class': ''}) %}
+{% spaceless %}
+    {% if required %}
+        {% set attr = attr|merge({'class': 'required'}) %}
+    {% endif %}
+    <label{% for attrname,attrvalue in attr %} {{attrname}}="{{attrvalue}}"{% endfor %}>{{ label|trans({}, translation_domain) }}</label>
+{% endspaceless %}
+{% endblock %}
+
+{% block collection_widget %}
+{% spaceless %}
+    {{ block('form_widget') }}
+{% endspaceless %}
+{% endblock collection_widget %}
+
+{% block choice_widget_expanded %}
+{% spaceless %}
+    {% set label_attr = label_attr|merge({'class': (label_attr.class|default('') ~ ' ' ~ (multiple ? 'checkbox' : 'radio'))}) %}
+    {% set label_attr = label_attr|merge({'class': (label_attr.class ~ ' ' ~ (widget_type ? widget_type : ''))}) %}
+    {% set label_attr = label_attr|merge({'class': (label_attr.class ~ ' ' ~ (inline is defined and inline ? 'inline' : ''))|trim}) %}
+    <div {{ block('widget_container_attributes') }}>
+    {% for child in form %}
+        <label{% for attrname, attrvalue in label_attr %} {{ attrname }}="{{ attrvalue }}"{% endfor %}>
+            {{ form_widget(child, {'attr': {'class': attr.widget_class|default('')}}) }}
+            {{ child.vars.label|trans({}, translation_domain) }}
+        </label>
+    {% endfor %}
+    </div>
+{% endspaceless %}
+{% endblock choice_widget_expanded %}
+
+{% block checkbox_widget %}
+{% spaceless %}
+{% if form.parent != null and 'choice' not in form.parent.vars.block_prefixes %}
+    <label class="checkbox{% if inline is defined and inline %} inline{% endif %}">
+{% endif %}
+        <input type="checkbox" {{ block('widget_attributes') }}{% if value is defined %} value="{{ value }}"{% endif %}{% if checked %} checked="checked"{% endif %}/>
+{% if form.parent != null and 'choice' not in form.parent.vars.block_prefixes %}
+        {{ value|trans({}, translation_domain) }}
+    </label>
+{% endif %}
+{% endspaceless %}
+{% endblock checkbox_widget %}
+
+{% block date_widget %}
+{% spaceless %}
+{% if widget == 'single_text' %}
+    {% if datepicker is defined %}
+        <div class="input-{{ widget_addon.type }} date" {{ block('widget_container_attributes') }} data-date="{{ value }}" data-date-format="{{ format|lower }}" data-form="datepicker">
+            {% if widget_addon.type == 'prepend' %}
+                {{ block('widget_addon') }}
+            {% endif %}
+            {% set attr = attr|merge({'class': attr.class|default('') ~ ' not-removable grd-white'}) %}
+            <input type="text" {{ block('widget_attributes') }} value="{{ value }}"  data-form="datepicker" data-date-format="{{ format|lower }}"/>
+            {% if widget_addon.type == 'append' %}
+                {{ block('widget_addon') }}
+            {% endif %}
+            <script type="text/javascript">
+                $(document).ready(function () {
+                    $({{ id }}).datepicker();
+                });
+
+
+            </script>
+        </div>
+    {% else %}
+        {{ block('form_widget_simple') }}
+    {% endif %}
+{% else %}
+        {% set attr = attr|merge({'class': attr.class|default('inline')}) %}
+            {{ date_pattern|replace({
+                '{{ year }}':  form_widget(form.year, {'attr': {'class': attr.widget_class|default('') ~ ' input-small'}}),
+                '{{ month }}': form_widget(form.month, {'attr': {'class': attr.widget_class|default('') ~ ' input-mini'}}),
+                '{{ day }}':   form_widget(form.day, {'attr': {'class': attr.widget_class|default('') ~ ' input-mini'}}),
+            })|raw }}
+        {{ block('help') }}
+{% endif %}
+{% endspaceless %}
+{% endblock date_widget %}
+
+{% block time_widget %}
+{% spaceless %}
+    {% if widget == 'single_text' %}
+        {{ block('form_widget_simple') }}
+    {% else %}
+        {% set attr = attr|merge({'class': attr.class|default('')}) %}
+        <div {{ block('widget_container_attributes')  }}>
+            {{ form_widget(form.hour, { 'attr': {  'size': '1', 'class': 'input-mini' } }) }}:{{ form_widget(form.minute, { 'attr': { 'size': '1', 'class': 'input-mini' } }) }}{% if with_seconds %}:{{ form_widget(form.second, { 'attr': { 'size': '1', 'class': 'input-mini' } }) }}{% endif %}
+        </div>
+        {{ block('help') }}
+    {% endif %}
+{% endspaceless %}
+{% endblock time_widget %}
+
+{% block datetime_widget %}
+{% spaceless %}
+    {% if widget == 'single_text' %}
+        {{ block('form_widget_simple') }}
+    {% else %}
+            {% set attr = attr|merge({'class': attr.class|default('')}) %}
+            <div {{ block('widget_container_attributes') }}>
+                {{ form_errors(form.date) }}
+                {{ form_errors(form.time) }}
+                {{ form_widget(form.date, {'attr': {'class': attr.widget_class|default('')}}) }}
+                {{ form_widget(form.time, {'attr': {'class': attr.widget_class|default('')}}) }}
+            </div>
+    {% endif %}
+{% endspaceless %}
+{% endblock datetime_widget %}
+
+{% block percent_widget %}
+{% spaceless %}
+    {% set widget_addon = widget_addon|merge({'text': widget_addon.text|default('%')}) %}
+    {{ block('form_widget_simple') }}
+{% endspaceless %}
+{% endblock percent_widget %}
+
+{% block money_widget %}
+{% spaceless %}
+    {% set widget_addon = widget_addon|merge({'text': money_pattern|replace({ '{{ widget }}': ''})}) %}
+    {{ block('form_widget_simple') }}
+{% endspaceless %}
+{% endblock money_widget %}

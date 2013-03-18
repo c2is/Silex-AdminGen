@@ -127,7 +127,7 @@ class {$classname} extends Listing
             $type = $columns['type'];
 
             $script .= "
-        \$this->addColumn(new Column\\{$type}Column('{$name}'));\n";
+        \$this->addColumn(new Column\\{$type}Column('{$name}'));";
         }
 
         $script .= "

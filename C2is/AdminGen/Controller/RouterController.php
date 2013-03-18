@@ -50,6 +50,11 @@ class RouterController implements ControllerProviderInterface
         $this->listingClassname = $listingClassname;
     }
 
+    public function getName()
+    {
+        return $this->name;
+    }
+
     public function connect(Application $app)
     {
         $ctl = $app['controllers_factory'];
