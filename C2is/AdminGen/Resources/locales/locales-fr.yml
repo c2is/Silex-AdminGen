@@ -1,0 +1,10 @@
+crud:
+    term:
+        no_lines: "Aucun élément trouvé."
+        add: "Ajouter"
+        items: "élément(s)"
+        save: "Sauvegarder"
+        list: "Retourner à la liste"
+        delete: "Supprimer l'élément"
+        delete_message: "Êtes vous sur de vouloir supprimer l'élément ?"
+        cancel: "Annuler"

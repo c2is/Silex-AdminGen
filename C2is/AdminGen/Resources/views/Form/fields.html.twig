@@ -1,5 +1,11 @@
 {% extends 'form_div_layout.html.twig' %}
 
+{% block textrich_widget %}
+{% spaceless %}
+    <textarea class="ckeditor" {{ block('widget_attributes') }}>{{ value }}</textarea>
+{% endspaceless %}
+{% endblock %}
+
 {% block field_row %}
 {% spaceless %}
     <div class="control-group">
@@ -15,7 +21,7 @@
 {% block field_errors %}
 {% spaceless %}
     {% if errors|length > 0 %}
-    <span class="help-{{ block('error_type') }}">
+    <span class="help-inline">
             {% for error in errors %}
                 {{
                     error.messagePluralization is null
@@ -28,13 +34,13 @@
 {% endspaceless %}
 {% endblock field_errors %}
 
-{% block generic_label %}
+{% block form_label %}
 {% set attr = attr|merge({'class': ''}) %}
 {% spaceless %}
     {% if required %}
         {% set attr = attr|merge({'class': 'required'}) %}
     {% endif %}
-    <label{% for attrname,attrvalue in attr %} {{attrname}}="{{attrvalue}}"{% endfor %}>{{ label|trans({}, translation_domain) }}</label>
+    <label{% for attrname,attrvalue in attr %} {{attrname}}="{{attrvalue}}"{% endfor %}>{{ label|trans({}, translation_domain) }} {% if required %}(<i class="icon-asterisk"></i>){% endif %}</label>
 {% endspaceless %}
 {% endblock %}
 

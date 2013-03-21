@@ -3,32 +3,24 @@
 <head>
     <title>Silex Admin Gen by C2iS</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="{{ app.request.basePath }}/admingen/css/bootstrap.min.css">
-    <style type="text/css">
-        #admin_content .container {
-            padding: 0 20px 20px;
-            width: auto;
-        }
-    </style>
-    <link rel="stylesheet" href="{{ app.request.basePath }}/admingen/css/bootstrap-responsive.min.css">
+    <link rel="stylesheet" href="{{ app.request.basePath }}/admingen/default/css/bootstrap.min.css">
+    <link rel="stylesheet" href="{{ app.request.basePath }}/admingen/default/css/font-awesome.min.css">
+    <link rel="stylesheet" href="{{ app.request.basePath }}/admingen/default/css/admingen.css">
+    <link rel="stylesheet" href="{{ app.request.basePath }}/admingen/default/css/bootstrap-responsive.min.css">
 </head>
 <body>
     <div id="admin_header">
-        {% include '@AdminGen/Menu/menu.html.twig' %}
+        {% include '@AdminGen/Menu/main.html.twig' %}
     </div>
-    <div id="admin_content">
-        <div class="row-fluid">
-            <div class="span3">
-                <div class="container">
-                </div>
-            </div>
-            <div class="span9">
-                <div class="container">
-                    {% block content '' %}
-                </div>
-            </div>
-        </div>
+    <div id="admin_content" class="container">
+        {% block content '' %}
     </div>
-    <script src="{{ app.request.basePath }}/admingen/js/bootstrap.min.js"></script>
+
+    <script src="{{ app.request.basePath }}/admingen/default/js/jquery.min.js"></script>
+    <script src="{{ app.request.basePath }}/admingen/default/js/bootstrap.min.js"></script>
+    <script src="{{ app.request.basePath }}/admingen/default/js/confirm-bootstrap.js"></script>
+    <script src="{{ app.request.basePath }}/admingen/default/js/jqBootstrapValidation.js"></script>
+    <script src="{{ app.request.basePath }}/admingen/ckeditor/ckeditor.js"></script>
+    <script src="{{ app.request.basePath }}/admingen/default/js/admingen.js"></script>
 </body>
 </html>

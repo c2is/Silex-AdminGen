@@ -1,0 +1,16 @@
+<div id="widget_component_{% block componentName 'default' %}" class="component">
+    <div class="component-header">
+        <span class="title">{{ theme_title|default('') }}</span>
+        <div class="actions">
+            {{ theme_button }}
+        </div>
+    </div>
+    <div class="component-content">
+        <div class="container">
+        {{ theme_content|default('') }}
+        </div>
+    </div>
+    <div class="component-footer">
+        {{ theme_footer|default('') }}
+    </div>
+</div>

@@ -1,8 +1,8 @@
-{% extends "@AdminGen/layout.html.twig" %}
+{% extends app.request.get('widget', false) ? "@AdminGen/widget.html.twig" : "@AdminGen/layout.html.twig" %}
 
 {% block content %}
 
-    {% form_theme form '@AdminGen/Form/theme.html.twig' %}
+    {% form_theme form '@AdminGen/Form/fields.html.twig' %}
 
     {% if form.id.vars['value'] %}
         <h2>{{ (name ~ ".crud.update") | trans  ({'%name%': form.id.vars['value'] }) }}</h2><hr/>
@@ -20,7 +20,7 @@
                     <a class="btn btn-danger" href="{{ path('%s_admingen_delete' | format (name), {'object': form.id.vars['value'] }) }}"><i class="icon-remove-circle icon-white"></i> {{ "crud.button.delete" | trans }}</a>
                 {% endif %}
                 </div>
-                <button type="submit" class="btn btn-primary pull-right" style="margin-bottom: -5px">{{ "crud.button.save" | trans }}</button>
+                <button type="submit" class="form-btn-submit btn btn-primary pull-right" style="margin-bottom: -5px">{{ "crud.button.save" | trans }}</button>
             </div>
         </div>
     </form>

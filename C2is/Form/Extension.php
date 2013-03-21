@@ -12,6 +12,7 @@ class Extension extends AbstractExtension
             new \C2is\Form\Type\ModelType(),
             new \C2is\Form\Type\TranslationType(),
             new \C2is\Form\Type\TranslationCollectionType(),
+            new \C2is\Form\Type\TextrichType(),
         );
     }
 }

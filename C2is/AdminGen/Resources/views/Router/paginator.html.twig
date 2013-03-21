@@ -1,0 +1,13 @@
+<div class="pagination pagination-centered">
+    <ul class=" pull-right">
+        {% if paginator.page != paginator.previousPage %}
+        <li><a href="{{ path ('%s_admingen_list' | format (name), {'page': paginator.previousPage}) }}"><i class="icon-chevron-left"></i></a></li>
+        {% endif %}
+        {% for link in paginator.links %}
+        <li {% if paginator.page == link %}class="active"{% endif %}><a href="{{ path ('%s_admingen_list' | format (name), {'page': link}) }}">{{ link }}</a></li>
+        {% endfor %}
+        {% if paginator.page != paginator.nextPage %}
+        <li><a href="{{ path ('%s_admingen_list' | format (name), {'page': paginator.nextPage}) }}"><i class="icon-chevron-right"></i></a></li>
+        {% endif %}
+    </ul>
+</div>

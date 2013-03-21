@@ -17,6 +17,7 @@ use Silex\Application;
 use Silex\ControllerProviderInterface;
 
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\HttpException;
 
 use Exception;
@@ -103,16 +104,19 @@ class RouterController implements ControllerProviderInterface
         return $modelObject;
     }
 
-    function listAction(Application $app, $page)
+    function listAction(Application $app, Request $request, $page)
     {
-        $paginator = call_user_func($this->queryClassname.'::create')->paginate($page, 50);
+        $paginator = call_user_func($this->queryClassname.'::create')
+            ->orderByCreatedAt($app['admingen.context_parameters']['order'])
+            ->paginate($page, $app['admingen.context_parameters']['limit'])
+        ;
 
         // generate the current listing object
         $listingClassname = $this->listingClassname;
         $listing = new $listingClassname($app);
         $listing->setFiller(new PropelFiller($paginator->getResults()));
 
-        return $app->renderView('@AdminGen/Router/list.html.twig', array(
+        return $app->renderView("@AdminGen/Router/Collector/list.html.twig", array(
             'name'      => $this->name,
             'columns'   => $listing->getColumnNames(),
             'lines'     => $listing->render(),
@@ -133,13 +137,14 @@ class RouterController implements ControllerProviderInterface
             if ($form->isValid()) {
                 $object->saveFromCrud($app, $form);
 
-                return $app->redirect($app['url_generator']->generate($this->name.'_admingen_list'));
+                return $app->redirect($app->path($this->name.'_admingen_list'));
             }
         }
 
-        return $app->renderView('@AdminGen/Router/edit.html.twig', array(
-            'name' => $this->name,
-            'form' => $form->createView(),
+        return $app->renderView("@AdminGen/Router/Collector/edit.html.twig", array(
+            'name'   => $this->name,
+            'form'   => $form->createView(),
+            'object' => $object,
         ));
     }
 

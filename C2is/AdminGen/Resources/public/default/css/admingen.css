@@ -1,0 +1,79 @@
+body {
+    background: url(../img/ecailles.png)
+}
+#admin_content {
+    padding: 0 20px 20px;
+}
+.container {
+    margin: auto;
+}
+#admin_content .container {
+    width: auto;
+}
+
+.component {
+    -webkit-box-shadow: 0 10px 10px -10px #cccccc;
+    -moz-box-shadow: 0 10px 10px -10px #cccccc;
+    box-shadow: 0 10px 10px -10px #cccccc;
+    background: #fafafa;
+    border: 1px solid #cdcdcd;
+    -webkit-border-radius: 3px;
+    -moz-border-radius: 3px;
+    -ms-border-radius: 3px;
+    -o-border-radius: 3px;
+    border-radius: 3px;
+    margin-bottom: 20px;
+}
+.component-header {
+    -moz-border-radius-topright: 3px;
+    -webkit-border-top-right-radius: 3px;
+    border-top-right-radius: 3px;
+    -moz-border-radius-topleft: 3px;
+    -webkit-border-top-left-radius: 3px;
+    border-top-left-radius: 3px;
+    background: #e8e8e8;
+    background-image: url('data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0idXRmLTgi…pZHRoPSIxMDAlIiBoZWlnaHQ9IjEwMCUiIGZpbGw9InVybCgjZ3JhZCkiIC8+PC9zdmc+IA==');
+    background-size: 100%;
+    background-image: -webkit-gradient(linear,50% 0,50% 100%,color-stop(0%,#f8f8f8),color-stop(100%,#e8e8e8));
+    background-image: -webkit-linear-gradient(top,#f8f8f8,#e8e8e8);
+    background-image: -moz-linear-gradient(top,#f8f8f8,#e8e8e8);
+    background-image: -o-linear-gradient(top,#f8f8f8,#e8e8e8);
+    background-image: linear-gradient(top,#f8f8f8,#e8e8e8);
+    text-shadow: 0 1px white;
+    border-bottom: 1px solid #cdcdcd;
+    color: #636363;
+    font-weight: 600;
+}
+.component-header .title {
+    display: inline-block;
+    padding: 10px;
+    font-size: 12px;
+    font-weight: bold;
+    text-shadow: 0 1px white;
+    color: #636363;
+}
+.component-header .actions {
+    float: right;
+    padding: 10px;
+    font-weight: bold;
+}
+.component-content {
+    background: white;
+    overflow-x: auto;
+    width: 100%;
+}
+.component .container {
+    padding: 10px;
+}
+.component-footer {
+    overflow: auto;
+    border-top: 1px solid #dddddd;
+    padding: 10px;
+    text-align: right;
+    color: #999999;
+}
+
+label.required i {
+    font-size: 10px;
+    color: #333333;
+}

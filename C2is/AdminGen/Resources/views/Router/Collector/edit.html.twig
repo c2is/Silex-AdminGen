@@ -1,0 +1,34 @@
+{% extends app.request.get('widget', false) ? "@AdminGen/widget.html.twig" : "@AdminGen/Router/Default/edit.html.twig" %}
+
+{% set theme_title %}
+{% spaceless %}
+{% if form.id.vars['value'] %}
+{{ (name ~ ".crud.update") | trans({'%name%': object }) }}
+{% else %}
+{{ (name ~ ".crud.create") | trans}}
+{% endif %}
+{% endspaceless %}
+{% endset %}
+
+{% set theme_content %}
+    {% form_theme form '@AdminGen/Form/fields.html.twig' %}
+
+    {% if form.id.vars['value'] %}
+        <form action="{{ path('%s_admingen_update' | format (name), {'object': object.id}) }}" method="post" {{ form_enctype(form) }}>
+    {% else %}
+        <form action="{{ path('%s_admingen_create' | format (name)) }}" method="post" {{ form_enctype(form) }}>
+    {% endif %}
+        {{ form_widget(form) }}
+    </form>
+{% endset %}
+
+{% set theme_footer %}
+<div class="btn-group pull-left">
+    <a class="btn" href="{{ path('%s_admingen_list' | format (name)) }}"><i class="icon-list"></i> {{ "crud.term.list" | trans }}</a>
+    {% if object.id %}
+    <a class="btn btn-danger" href="{{ path('%s_admingen_delete' | format (name), {'object': form.id.vars['value'] }) }}"><i class="icon-remove-circle icon-white"></i> {{ "crud.term.delete" | trans }}</a>
+    {% endif %}
+</div>
+
+<button type="submit" class="form-btn-submit btn btn-primary" style="margin-bottom: -5px">{{ "crud.term.save" | trans }}</button>
+{% endset %}

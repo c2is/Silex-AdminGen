@@ -1,0 +1,58 @@
+{% extends app.request.get('widget', false) ? "@AdminGen/widget.html.twig" : "@AdminGen/Router/Default/list.html.twig" %}
+
+{% set theme_title %}{{ (name ~ ".crud.list") | trans }}{% endset %}
+
+{% set theme_button %}
+<div class="btn-group">
+    <a class="btn add btn-mini" href="{{ context_path('%s_admingen_create' | format (name)) }}">{{ "crud.term.add" | trans }}</a>
+</div>
+{% endset %}
+
+{% set theme_content %}
+    {% if lines|length == 0 %}
+    <p>{{ "crud.term.no_lines" | trans }}</p>
+    {% else %}
+    <table id="{{ name }}-list" class="table table-striped ">
+        <thead>
+        <tr>
+            {% for column_name in columns %}
+            {% if column_name != name ~ ".active" %}
+                <th>{{ column_name | trans }}</th>
+            {% endif %}
+            {% endfor %}
+            <th class="actions-item" colspan="3">{{ 'crud.term.actions' | trans }}</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for line in lines %}
+        <tr class="line">
+            {% for column_name,column in line %}
+            {% if column_name != "active" %}
+                <td>{{ column | raw }}</td>
+            {% endif %}
+            {% endfor %}
+            <td class="actions-item">
+                <a class="edit" href="{{ context_path('%s_admingen_update' | format (name), {'object': line.id}) }}">
+                    <i class="icon-edit"></i>
+                </a>
+            </td>
+            <td class="actions-item">
+                <a class="delete" href="{{ context_path('%s_admingen_delete' | format (name), {'object': line.id}) }}">
+                    <i  data-confirm-button-ok="{{ "crud.term.delete" | trans }}"
+                        data-confirm-button-cancel="{{ "crud.term.cancel" | trans }}"
+                        data-confirm-title="{{ name ~ ".crud.delete" | trans }}"
+                        data-confirm-message="{{ "crud.term.delete_message" | trans  ({'%code%': line.id }) }}"
+                        class="icon-remove-circle">
+                    </i>
+                </a>
+            </td>
+        </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+    {% endif %}
+{% endset %}
+
+{% set theme_footer %}
+{{ paginator|length }} {{ "crud.term.items" | trans }}
+{% endset %}

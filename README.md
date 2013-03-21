@@ -22,7 +22,8 @@ And enable it in your application:
 use C2is\Provider\AdminGenServiceProvider;
 
 $app->register(new AdminGenServiceProvider(), array(
-    'admin_gen.mount_path'  => 'admin', // optional
     'admin_gen.config_file' => '/path/to/config/admingen/admingen-conf.php',
+    'admin_gen.mount_path'  => 'admin', // optional
+    'admin_gen.language'    => 'fr', // optional
 ));
 ```

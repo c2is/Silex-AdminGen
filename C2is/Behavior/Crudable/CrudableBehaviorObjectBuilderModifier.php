@@ -38,7 +38,6 @@ class CrudableBehaviorObjectBuilderModifier
 
         // generate confif files
         $this->generateAdminGenConfig();
-        $this->generateLanguagesConfig();
 
         $script = $this->addSaveFromCrud($builder);
 
@@ -167,34 +166,6 @@ class CrudableBehaviorObjectBuilderModifier
         file_put_contents(
             $crudFilename,
             sprintf("<?php\nreturn %s;\n", var_export($controllersConf, true))
-        );
-    }
-
-    protected function generateLanguagesConfig()
-    {
-        // validate the existence of the languages configuration file
-        $phpConfDir        = $this->behavior->getTable()->getGeneratorConfig()->getBuildProperties()['behaviorCrudablePhpconfDir'];
-        $languagesFilename = sprintf("%s/languages-conf.php", rtrim($phpConfDir, '/'));
-
-        if (!file_exists($languagesFilename)) {
-            $fs = new Filesystem();
-            $fs->touch($languagesFilename);
-        }
-
-        $languagesString = str_replace(' ', '', $this->behavior->getTable()->getGeneratorConfig()->getBuildProperties()['behaviorCrudableLanguages']);
-        $languagesConf   = explode(';', $languagesString);
-
-        $languagesConf = array_map(function($value) {
-            return array(
-                'locale'   => $value,
-                'filename' => sprintf("trans-%s.yml", $value),
-            );
-        }, $languagesConf);
-
-        // write the controllers configuration file
-        file_put_contents(
-            $languagesFilename,
-            sprintf("<?php\nreturn %s;\n", var_export($languagesConf, true))
         );
     }
 }

@@ -2,8 +2,8 @@
     <div class="navbar-inner">
         <a class="brand" href="#">Admin</a>
         <ul class="nav">
-            {% for item in app.admingen_menu %}
-            <li><a href="{{ item.url }}">{{ item.name | trans }}</a></li>
+            {% for item in app['admingen.menu'] %}
+            <li><a href="{{ context_path(item.name ~ '_admingen_list') }}">{{ item.name | trans }}</a></li>
             {% endfor %}
         </ul>
     </div>
