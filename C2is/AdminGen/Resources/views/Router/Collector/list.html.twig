@@ -20,7 +20,7 @@
                 <th>{{ column_name | trans }}</th>
             {% endif %}
             {% endfor %}
-            <th class="actions-item" colspan="3">{{ 'crud.term.actions' | trans }}</th>
+            <th class="actions-item" colspan="2">{{ 'crud.term.actions' | trans }}</th>
         </tr>
         </thead>
         <tbody>
@@ -42,7 +42,7 @@
                         data-confirm-button-cancel="{{ "crud.term.cancel" | trans }}"
                         data-confirm-title="{{ name ~ ".crud.delete" | trans }}"
                         data-confirm-message="{{ "crud.term.delete_message" | trans  ({'%code%': line.id }) }}"
-                        class="icon-remove-circle">
+                        class="icon-remove">
                     </i>
                 </a>
             </td>

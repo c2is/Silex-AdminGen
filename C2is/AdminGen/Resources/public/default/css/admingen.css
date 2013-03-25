@@ -73,6 +73,10 @@ body {
     color: #999999;
 }
 
+.actions-item a i {
+    color: #333;
+}
+
 label.required i {
     font-size: 10px;
     color: #333333;
