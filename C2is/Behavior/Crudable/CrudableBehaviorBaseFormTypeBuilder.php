@@ -130,7 +130,7 @@ class {$classname} extends AbstractType
             return $constraints;
         }
 
-        if ($column->getAttribute('required', false)) {
+        if ($column->getAttribute('required', false) === 'true') {
             $constraints[] = 'new Assert\NotBlank()';
         }
 
