@@ -14,6 +14,11 @@ class CrudableBehaviorUtils
         return strtoupper($string[0]) . substr($string, 1);
     }
 
+    static public function normalize($appName)
+    {
+        return preg_replace('/[^a-z_-]+/', '_', strtolower($appName));
+    }
+
     static public function getModelClassname($namespace, $tableName)
     {
         return sprintf("\\%s\\%s",

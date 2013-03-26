@@ -130,7 +130,7 @@ class {$classname} extends AbstractType
             return $constraints;
         }
 
-        if ($column->getAttribute('required', false)) {
+        if ($column->getAttribute('required', false) === 'true') {
             $constraints[] = 'new Assert\NotBlank()';
         }
 
@@ -273,6 +273,8 @@ class {$classname} extends AbstractType
                     $columnName = $fColumn->getForeignTable()->getName();
                     if ($foreignKeysByTable[$fColumn->getForeignTable()->getName()] > 1) {
                         $columnName = sprintf("%s_related_by_%s", $columnName, $column->getName());
+                    } elseif ($columnName == $column->getTable()->getName()) {
+                        $columnName = CrudableBehaviorUtils::normalize($fColumn->getPhpName());
                     }
 
                     $fields[$columnName]['type'] = 'model';
