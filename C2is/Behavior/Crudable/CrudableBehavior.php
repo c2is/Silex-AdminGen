@@ -69,4 +69,24 @@ class CrudableBehavior extends Behavior
 
         return $this->objectBuilderModifier;
     }
+
+    public function staticMethods()
+    {
+        $queryClassname = CrudableBehaviorUtils::getQueryClassname(
+            $this->getTable()->getNamespace(),
+            $this->getTable()->getName()
+        );
+
+        $script = "
+    /**
+     * @return ModelCriteria The Query object used for listing
+     */
+    public static function getListQuery()
+    {
+        return $queryClassname::create();
+    }
+";
+
+        return $script;
+    }
 }

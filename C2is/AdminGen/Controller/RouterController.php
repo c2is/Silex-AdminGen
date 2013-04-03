@@ -106,7 +106,7 @@ class RouterController implements ControllerProviderInterface
 
     function listAction(Application $app, Request $request, $page)
     {
-        $paginator = call_user_func($this->queryClassname.'::create')
+        $paginator = call_user_func($this->peerClassname.'::getListQuery')
             ->orderByCreatedAt($app['admingen.context_parameters']['order'])
             ->paginate($page, $app['admingen.context_parameters']['limit'])
         ;

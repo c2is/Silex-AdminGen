@@ -58,7 +58,7 @@ class AdminGenServiceProvider implements ServiceProviderInterface
         }));
 
         $app['admingen.menu'] = $app->share(function ($app) {
-            return array();
+            return require_once dirname($app['admin_gen.config_file']) . '/menu-conf.php';
         });
 
         $app['admingen.context_parameters'] = $app->share(function ($app) {
@@ -110,16 +110,6 @@ class AdminGenServiceProvider implements ServiceProviderInterface
                 $options['form'],
                 $options['listing']
             );
-
-
-            $app['admingen.menu'] = $app->share($app->extend('admingen.menu', function ($menu) use ($options) {
-                $menu[] = array(
-                    'name' => $options['name']
-                );
-
-                return $menu;
-            }));
-
 
             $app->mount($url, $router);
         }
