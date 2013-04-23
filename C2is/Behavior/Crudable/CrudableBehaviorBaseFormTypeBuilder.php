@@ -271,10 +271,10 @@ class {$classname} extends AbstractType
             if ($column->isForeignKey()) {
                 foreach ($column->getForeignKeys() as $fColumn) {
                     $columnName = $fColumn->getForeignTable()->getName();
-                    if ($foreignKeysByTable[$fColumn->getForeignTable()->getName()] > 1) {
-                        $columnName = sprintf("%s_related_by_%s", $columnName, $column->getName());
-                    } elseif ($columnName == $column->getTable()->getName()) {
+                    if ($columnName == $column->getTable()->getName()) {
                         $columnName = CrudableBehaviorUtils::normalize($fColumn->getPhpName());
+                    } elseif ($foreignKeysByTable[$fColumn->getForeignTable()->getName()] > 1) {
+                        $columnName = sprintf("%s_related_by_%s", $columnName, $column->getName());
                     }
 
                     $fields[$columnName]['type'] = 'model';
