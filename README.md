@@ -19,7 +19,7 @@ Adding private repository to composer.json file:
 And enable it, add this dependency to your composer.json file:
 
 ```js
-"c2is/admin-gen": "dev-master"
+"c2is/Silex-AdminGen": "dev-master"
 ```
 
 ## 2 - Generation of config and interface
