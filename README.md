@@ -29,7 +29,7 @@ You must define which table can editable by crud admin in your schema.xml. For t
 ```xml
 <table name="ma_table">
     <behavior name="timestample" /> <!-- Mandatory -->
-    <behavior name="crudable>
+    <behavior name="crudable">
         <parameter name="path" value="route/to/interface"/> <!-- Mandatory, the route mustn't contain the admin_gen.mount_path -->
     </behavior>
 </table>
