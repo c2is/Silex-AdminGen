@@ -1,10 +1,17 @@
 <div class="navbar">
     <div class="navbar-inner">
-        <a class="brand" href="#">Admin</a>
-        <ul class="nav">
-            {% for item in app['admingen.menu'].items %}
-            <li><a href="{{ context_path(item.route, item.parameters) }}">{{ item.title | trans }}</a></li>
-            {% endfor %}
-        </ul>
+        <div class="navbar-container">
+            {% if app['admingen.menu'].home_route is defined %}
+                {% set homePath = path(app['admingen.menu'].home_route) %}
+            {% else %}
+                {% set homePath = '#' %}
+            {% endif %}
+            <a class="brand" href="{{ homePath }}">{% if app['admingen.menu'].logo is defined %}<img src="{{ app.request.basePath ~ app['admingen.menu'].logo }}" title="{{ app['admingen.menu'].title }}" />{% else %}{{ app['admingen.menu'].title }}{% endif %}</a>
+            <ul class="nav">
+                {% for item in app['admingen.menu'].items %}
+                <li><a href="{{ context_path(item.route, item.parameters) }}">{{ item.title | trans }}</a></li>
+                {% endfor %}
+            </ul>
+        </div>
     </div>
 </div>
