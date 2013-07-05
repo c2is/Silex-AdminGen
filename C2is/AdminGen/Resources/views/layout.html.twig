@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Silex Admin Gen by C2iS</title>
+    <title>{% block head_title %}Silex Admin Gen by C2iS{% endblock %}</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
     {% block stylesheets %}
@@ -12,7 +12,7 @@
         <link rel="stylesheet" href="{{ app.request.basePath }}/admingen/default/css/bootstrap-responsive.min.css">
     {% endblock %}
 </head>
-<body>
+<body class="{% block body_class %}{% endblock %}">
     <div id="admin_header">
         {% include '@AdminGen/Menu/main.html.twig' %}
     </div>
