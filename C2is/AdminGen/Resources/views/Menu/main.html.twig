@@ -9,7 +9,7 @@
             <a class="brand" href="{{ homePath }}">{% if app['admingen.menu'].logo is defined %}<img src="{{ app.request.basePath ~ app['admingen.menu'].logo }}" title="{{ app['admingen.menu'].title }}" />{% else %}{{ app['admingen.menu'].title }}{% endif %}</a>
             <ul class="nav">
                 {% for item in app['admingen.menu'].items %}
-                <li><a href="{{ context_path(item.route, item.parameters) }}">{{ item.title | trans }}</a></li>
+                <li{% if item.active is defined and attribute(app, item.active) is defined and attribute(app, item.active) == item.slug %} class="active"{% endif %}><a href="{{ context_path(item.route, item.parameters) }}">{{ item.title | trans }}</a></li>
                 {% endfor %}
             </ul>
         </div>
