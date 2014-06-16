@@ -1,3 +1,6 @@
+{% if admin_items is not defined %}
+    {% set admin_items = app['admingen.menu'].items %}
+{% endif %}
 <div class="navbar">
     <div class="navbar-inner">
         <div class="navbar-container">
@@ -8,7 +11,7 @@
             {% endif %}
             <a class="brand" href="{{ homePath }}">{% if app['admingen.menu'].logo is defined %}<img src="{{ app.request.basePath ~ app['admingen.menu'].logo }}" title="{{ app['admingen.menu'].title }}" />{% else %}{{ app['admingen.menu'].title }}{% endif %}</a>
             <ul class="nav">
-                {% for item in app['admingen.menu'].items %}
+                {% for item in admin_items %}
                 <li><a href="{{ context_path(item.route, item.parameters) }}">{{ item.title | trans }}</a></li>
                 {% endfor %}
             </ul>

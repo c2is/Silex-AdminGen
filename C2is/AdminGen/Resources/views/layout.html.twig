@@ -14,7 +14,7 @@
 </head>
 <body class="{% block body_class %}{% endblock %}">
     <div id="admin_header">
-        {% include '@AdminGen/Menu/main.html.twig' %}
+        {% block admin_menu %}{% include '@AdminGen/Menu/main.html.twig' %}{% endblock %}
     </div>
     <div id="admin_content" class="container">
         {% block content '' %}
