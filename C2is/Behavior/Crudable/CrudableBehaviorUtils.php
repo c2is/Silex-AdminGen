@@ -6,7 +6,7 @@ class CrudableBehaviorUtils
 
     static public function camelize($string)
     {
-        $string = preg_replace("/([_-\s]?([a-zA-Z0-9]+))/e",
+        $string = preg_replace("/([_\-\s]?([a-zA-Z0-9]+))/e",
             "ucwords('\\2')",
             $string
         );
